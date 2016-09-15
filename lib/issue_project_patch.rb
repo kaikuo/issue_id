@@ -3,7 +3,7 @@ require_dependency 'project'
 module IssueProjectPatch
 
     def self.included(base)
-        base.const_set(:ISSUE_KEY_MAX_LENGTH, 10)
+        base.const_set(:ISSUE_KEY_MAX_LENGTH, 32)
         base.send(:include, InstanceMethods)
         base.class_eval do
             unloadable
@@ -13,7 +13,7 @@ module IssueProjectPatch
             has_one :key, :class_name => 'ProjectIssueKey', :primary_key => :issue_key, :foreign_key => :project_key
 
             validates_length_of :issue_key, :in => 1..Project::ISSUE_KEY_MAX_LENGTH, :allow_blank => true
-            validates_format_of :issue_key, :with => %r{^[A-Z][A-Z0-9]*$}, :allow_blank => true
+            validates_format_of :issue_key, :with => %r{^[A-Z][A-Z0-9_]*$}, :allow_blank => true
 
             validate :validate_issue_key_duplicates
 

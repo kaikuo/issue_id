@@ -23,7 +23,7 @@ module IssueApplicationHelperPatch
             end
         end
 
-        ISSUE_ID_RE = %r{([\s\(,\-\[\>]|^)(!)?(#(?:([A-Z][A-Z0-9]*)-)?(\d+))((?:#note)?-(\d+))?(?=(?=[[:punct:]]\W)|,|\s|\]|<|$)}m
+        ISSUE_ID_RE = %r{([\s\(,\-\[\>]|^)(!)?(#(?:([A-Z][A-Z0-9_]*)-)?(\d+))((?:#note)?-(\d+))?(?=(?=[[:punct:]]\W)|,|\s|\]|<|$)}m
 
         def parse_redmine_links_with_issue_id(text, project, obj, attr, only_path, options)
             text.gsub!(ISSUE_ID_RE) do |m|

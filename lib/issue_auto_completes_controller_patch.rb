@@ -19,7 +19,7 @@ module IssueAutoCompletesControllerPatch
             q = (params[:q] || params[:term]).to_s.strip
             if q.present?
                 scope = (params[:scope] == "all" || @project.nil? ? Issue : @project.issues).visible
-                if q.match(%r{\A#?([A-Z][A-Z0-9]*)-(\d+)\z})
+                if q.match(%r{\A#?([A-Z][A-Z0-9_]*)-(\d+)\z})
                     @issues << scope.find_by_project_key_and_issue_number($1.upcase, $2.to_i)
                 elsif q.match(%r{\A#?(\d+)\z})
                     @issues << scope.find_by_project_key_and_issue_number(@project.issue_key, $1.to_i) if @project
@@ -27,7 +27,7 @@ module IssueAutoCompletesControllerPatch
                 end
                 @issues += scope.find(:all, :conditions => ["LOWER(#{Issue.table_name}.subject) LIKE LOWER(?)", "%#{q}%"],
                                             :order      => "#{Issue.table_name}.id DESC",
-                                            :limit      => 10)
+                                            :limit      => 32)
                 @issues.compact!
             end
             if Redmine::VERSION::MAJOR == 1
